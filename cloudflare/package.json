@@ -1,0 +1,14 @@
+{
+  "name": "otpviego-api",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "db:init": "wrangler d1 execute otpviego-comments --file=schema.sql --remote",
+    "db:init:local": "wrangler d1 execute otpviego-comments --file=schema.sql --local"
+  },
+  "devDependencies": {
+    "wrangler": "^3.90.0"
+  }
+}

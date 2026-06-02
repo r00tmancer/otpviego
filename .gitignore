@@ -1,0 +1,14 @@
+# Local config & secrets
+.claude/
+.DS_Store
+*.log
+
+# Wrangler / Cloudflare local state
+cloudflare/node_modules/
+cloudflare/.wrangler/
+cloudflare/.dev.vars
+cloudflare/.env
+
+# Editor
+.vscode/
+.idea/

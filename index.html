@@ -1,0 +1,1862 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kozminik#tft — 47 patchtür nerf yiyorum</title>
+  <meta name="description" content="Viego OTP. Riot beni nerflese de bırakmayacağım." />
+  <link rel="icon" type="image/png" href="https://ddragon.leagueoflegends.com/cdn/14.24.1/img/champion/Viego.png" />
+  <style>
+    :root {
+      --bg: #06000a;
+      --bg-2: #100018;
+      --ghost-green: #39ff14;
+      --ghost-purple: #b388ff;
+      --cursed-cyan: #6ef0ff;
+      --blood: #ff073a;
+      --text: #e0d4ff;
+      --muted: #8a7aa8;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      background:
+        radial-gradient(ellipse at top, #1a002a 0%, var(--bg) 60%),
+        var(--bg);
+      font-family: 'Cinzel', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: var(--text);
+      margin: 0;
+      padding: 20px;
+      min-height: 100vh;
+    }
+
+    /* Cursed fog overlay */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 20% 80%, rgba(57,255,20,0.05) 0%, transparent 40%),
+        radial-gradient(circle at 80% 20%, rgba(179,136,255,0.06) 0%, transparent 50%);
+      z-index: 0;
+    }
+
+    body > * { position: relative; z-index: 1; }
+
+    header.site-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-weight: 700;
+      font-size: 22px;
+      color: var(--ghost-green);
+      user-select: none;
+      max-width: 1100px;
+      margin: 0 auto;
+      text-shadow: 0 0 8px var(--ghost-green);
+    }
+    header.site-header img.pp {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      border: 2px solid var(--ghost-green);
+      box-shadow: 0 0 18px var(--ghost-green);
+      object-fit: cover;
+    }
+    .rank-container { margin-left: 12px; display: flex; align-items: center; gap: 6px; }
+    .rank-logo { width: 44px; height: 44px; filter: drop-shadow(0 0 6px #aaa); }
+    .rank-label { color: var(--muted); font-size: 14px; }
+
+    /* KDA section */
+    #kda-winrate {
+      max-width: 1100px;
+      margin: 28px auto 0;
+      background: rgba(0,0,0,0.55);
+      border: 1px solid rgba(179,136,255,0.25);
+      border-radius: 16px;
+      padding: 22px 26px;
+      box-shadow: 0 0 24px rgba(179,136,255,0.15);
+    }
+    .kda-info {
+      display: flex;
+      align-items: center;
+      gap: 22px;
+      flex-wrap: wrap;
+    }
+    .thresh-logo {
+      width: 92px; height: 92px;
+      border-radius: 12px;
+      border: 2px solid var(--ghost-green);
+      box-shadow: 0 0 18px var(--ghost-green);
+    }
+    .kda-stats {
+      display: flex;
+      gap: 28px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .stat {
+      display: flex; flex-direction: column; align-items: center;
+      min-width: 70px;
+    }
+    .stat span:first-child {
+      font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px;
+    }
+    .stat span:last-child {
+      font-size: 28px; font-weight: 900;
+    }
+    .kill-stat   { color: var(--ghost-green); text-shadow: 0 0 8px var(--ghost-green); }
+    .death-stat  { color: var(--blood);       text-shadow: 0 0 8px var(--blood); }
+    .assist-stat { color: var(--cursed-cyan); text-shadow: 0 0 8px var(--cursed-cyan); }
+    .winrate {
+      font-size: 24px; font-weight: 900; color: var(--ghost-purple);
+      text-shadow: 0 0 8px var(--ghost-purple);
+      padding: 6px 12px; border: 1px dashed var(--ghost-purple); border-radius: 8px;
+    }
+    .wr-note { color: var(--muted); font-size: 12px; margin-top: 4px; font-style: italic; }
+    .stats-meta { color: var(--muted); font-size: 11px; margin-top: 14px; text-align: right; font-style: italic; opacity: 0.7; }
+
+    /* About */
+    #about-me {
+      background: rgba(0,0,0,0.65);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(57,255,20,0.2);
+      border-radius: 16px;
+      padding: 32px 40px;
+      max-width: 780px;
+      margin: 36px auto;
+      box-shadow: 0 0 26px rgba(57,255,20,0.18);
+    }
+    #about-me h2 {
+      color: var(--ghost-green);
+      font-size: 2.4rem;
+      font-weight: 900;
+      text-shadow: 0 0 12px var(--ghost-green);
+      margin: 0 0 18px 0;
+      user-select: none;
+    }
+    #about-me p {
+      font-size: 1.08rem; line-height: 1.75; margin-bottom: 14px; color: var(--text);
+    }
+    #about-me a {
+      color: var(--cursed-cyan); text-decoration: underline; font-weight: 600;
+    }
+    .ghost-emph { color: var(--ghost-green); font-weight: 700; }
+    .purple-emph { color: var(--ghost-purple); font-weight: 700; }
+
+    /* Category sections */
+    h2.category-title {
+      font-size: 32px;
+      margin: 50px 0 24px;
+      font-weight: 900;
+      letter-spacing: 2px;
+      user-select: none;
+      text-align: center;
+      text-shadow: 0 0 8px;
+    }
+    .category-sub {
+      text-align: center;
+      color: var(--muted);
+      font-size: 14px;
+      margin-top: -16px;
+      margin-bottom: 22px;
+      font-style: italic;
+    }
+
+    .neon-green  { color: var(--ghost-green); text-shadow: 0 0 5px var(--ghost-green), 0 0 10px var(--ghost-green), 0 0 20px var(--ghost-green), 0 0 40px #0fa; }
+    .neon-blue   { color: var(--cursed-cyan); text-shadow: 0 0 5px var(--cursed-cyan), 0 0 10px var(--cursed-cyan), 0 0 20px var(--cursed-cyan); }
+    .neon-purple { color: var(--ghost-purple); text-shadow: 0 0 5px var(--ghost-purple), 0 0 10px var(--ghost-purple), 0 0 20px var(--ghost-purple); }
+    .neon-orange { color: #ff9500; text-shadow: 0 0 5px #ff9500, 0 0 10px #ff9500, 0 0 20px #ff9500; }
+    .neon-red    { color: var(--blood); text-shadow: 0 0 5px var(--blood), 0 0 10px var(--blood), 0 0 20px var(--blood), 0 0 40px #f00; }
+
+    .category-container {
+      display: flex;
+      justify-content: center;
+      gap: 22px;
+      flex-wrap: wrap;
+      margin-bottom: 50px;
+      max-width: 1100px;
+      margin-left: auto; margin-right: auto;
+    }
+    .category-container img {
+      width: 104px; height: 104px;
+      border-radius: 14px;
+      border: 3px solid currentColor;
+      box-shadow: 0 0 18px currentColor;
+      cursor: pointer;
+      object-fit: cover;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .category-container img:hover {
+      transform: scale(1.15) rotate(-2deg);
+      box-shadow: 0 0 35px currentColor;
+    }
+
+    /* ======================== Lane selector ======================== */
+    .lane-selector {
+      max-width: 1200px;
+      margin: 80px auto 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 18px;
+      transition: opacity 0.5s ease, transform 0.5s ease, max-height 0.6s ease, margin 0.5s ease;
+      overflow: hidden;
+    }
+    .lane-selector h3 {
+      color: var(--ghost-green);
+      text-shadow: 0 0 10px var(--ghost-green), 0 0 24px rgba(57,255,20,0.5);
+      font-size: 32px;
+      font-weight: 900;
+      letter-spacing: 4px;
+      margin: 0;
+      user-select: none;
+      position: relative;
+    }
+    .lane-selector h3::before,
+    .lane-selector h3::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      width: 60px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--ghost-green));
+      opacity: 0.5;
+    }
+    .lane-selector h3::before { right: calc(100% + 18px); transform: scaleX(-1); }
+    .lane-selector h3::after  { left:  calc(100% + 18px); }
+    .lane-selector .lane-sub {
+      color: var(--muted);
+      font-size: 14px;
+      font-style: italic;
+      letter-spacing: 1px;
+      margin: -2px 0 22px;
+    }
+    .lane-btns {
+      display: flex;
+      gap: 28px;
+      flex-wrap: wrap;
+      justify-content: center;
+      perspective: 1000px;
+    }
+
+    .lane-btn {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      width: 200px;
+      height: 220px;
+      padding: 28px 18px;
+      background:
+        radial-gradient(ellipse at center, rgba(179,136,255,0.06) 0%, transparent 70%),
+        rgba(0,0,0,0.65);
+      border: 1px solid rgba(179,136,255,0.25);
+      border-radius: 18px;
+      cursor: pointer;
+      user-select: none;
+      transition: transform 0.35s cubic-bezier(.2,.9,.25,1.4),
+                  border-color 0.3s ease,
+                  box-shadow 0.4s ease,
+                  background 0.3s ease,
+                  opacity 0.4s ease,
+                  filter 0.4s ease;
+      transform-style: preserve-3d;
+      overflow: hidden;
+      will-change: transform, opacity;
+    }
+    /* Cyberpunk corner brackets */
+    .lane-btn::before,
+    .lane-btn::after {
+      content: '';
+      position: absolute;
+      width: 22px;
+      height: 22px;
+      border: 2px solid var(--ghost-green);
+      opacity: 0;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      pointer-events: none;
+    }
+    .lane-btn::before {
+      top: 8px; left: 8px;
+      border-right: none; border-bottom: none;
+      transform: translate(6px, 6px);
+    }
+    .lane-btn::after {
+      bottom: 8px; right: 8px;
+      border-left: none; border-top: none;
+      transform: translate(-6px, -6px);
+    }
+    /* Scan-line sweep */
+    .lane-btn .scanline {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: linear-gradient(180deg,
+        transparent 0%,
+        transparent 45%,
+        rgba(57,255,20,0.18) 50%,
+        transparent 55%,
+        transparent 100%);
+      transform: translateY(-110%);
+      transition: transform 0.7s ease;
+      mix-blend-mode: screen;
+    }
+    .lane-btn .glow-ring {
+      position: absolute;
+      inset: -2px;
+      border-radius: 18px;
+      pointer-events: none;
+      opacity: 0;
+      box-shadow:
+        inset 0 0 30px rgba(57,255,20,0.35),
+        0 0 40px rgba(57,255,20,0.45);
+      transition: opacity 0.35s ease;
+    }
+
+    .lane-btn img {
+      width: 92px;
+      height: 92px;
+      filter: invert(72%) sepia(18%) saturate(380%) hue-rotate(225deg) brightness(95%) drop-shadow(0 0 0 transparent);
+      transition: filter 0.4s ease, transform 0.5s cubic-bezier(.2,.9,.25,1.4);
+      will-change: transform, filter;
+    }
+    .lane-btn span {
+      color: var(--muted);
+      font-size: 18px;
+      font-weight: 900;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      transition: color 0.3s ease, text-shadow 0.3s ease, letter-spacing 0.3s ease;
+    }
+
+    /* Hover */
+    .lane-btn:hover {
+      transform: translateY(-10px) scale(1.04);
+      border-color: rgba(57,255,20,0.7);
+      background:
+        radial-gradient(ellipse at center, rgba(57,255,20,0.12) 0%, transparent 70%),
+        rgba(0,0,0,0.7);
+      box-shadow: 0 14px 40px rgba(0,0,0,0.5), 0 0 30px rgba(57,255,20,0.3);
+    }
+    .lane-btn:hover::before,
+    .lane-btn:hover::after {
+      opacity: 1;
+      transform: translate(0, 0);
+    }
+    .lane-btn:hover .scanline { transform: translateY(110%); }
+    .lane-btn:hover img {
+      transform: scale(1.12) translateY(-4px);
+      filter: invert(83%) sepia(80%) saturate(2200%) hue-rotate(60deg) brightness(115%)
+              drop-shadow(0 0 16px rgba(57,255,20,0.7));
+    }
+    .lane-btn:hover span {
+      color: var(--ghost-green);
+      text-shadow: 0 0 8px var(--ghost-green);
+      letter-spacing: 6px;
+    }
+
+    /* Active (saved selection persisting in UI before click animation) */
+    .lane-btn.active {
+      border-color: var(--ghost-green);
+      box-shadow: 0 0 28px rgba(57,255,20,0.45), inset 0 0 20px rgba(57,255,20,0.08);
+      background:
+        radial-gradient(ellipse at center, rgba(57,255,20,0.15) 0%, transparent 70%),
+        rgba(0,0,0,0.7);
+    }
+    .lane-btn.active img {
+      filter: invert(83%) sepia(80%) saturate(2200%) hue-rotate(60deg) brightness(115%)
+              drop-shadow(0 0 12px rgba(57,255,20,0.6));
+    }
+    .lane-btn.active span {
+      color: var(--ghost-green);
+      text-shadow: 0 0 6px var(--ghost-green);
+    }
+
+    /* CLICK SEQUENCE */
+    /* Chosen button bursts forward */
+    .lane-btn.chosen {
+      animation: lane-burst 0.55s cubic-bezier(.2,.9,.25,1.4) forwards;
+      z-index: 2;
+    }
+    .lane-btn.chosen .glow-ring { opacity: 1; }
+    @keyframes lane-burst {
+      0%   { transform: translateY(0) scale(1); }
+      40%  { transform: translateY(-22px) scale(1.18); filter: brightness(1.5); }
+      100% { transform: translateY(-12px) scale(0.6); opacity: 0; filter: brightness(2.2) blur(6px); }
+    }
+    /* Other buttons drain away */
+    .lane-btn.dismissed {
+      animation: lane-dismiss 0.45s ease forwards;
+      pointer-events: none;
+    }
+    @keyframes lane-dismiss {
+      0%   { transform: translateY(0) scale(1); opacity: 1; }
+      100% { transform: translateY(14px) scale(0.85); opacity: 0; filter: blur(4px); }
+    }
+    /* Whole selector collapses */
+    .lane-selector.locked {
+      opacity: 0;
+      max-height: 0;
+      margin: 0 auto;
+      transform: translateY(-20px);
+      pointer-events: none;
+    }
+
+    /* Small "change lane" pill that appears after lock */
+    .lane-switch {
+      max-width: 1100px;
+      margin: 24px auto 12px;
+      display: flex;
+      justify-content: center;
+      opacity: 0;
+      transform: translateY(-8px);
+      transition: opacity 0.4s ease 0.2s, transform 0.4s ease 0.2s;
+      pointer-events: none;
+    }
+    .lane-switch.visible {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+    .lane-switch button {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 18px;
+      background: rgba(0,0,0,0.6);
+      border: 1px solid rgba(57,255,20,0.35);
+      border-radius: 999px;
+      color: var(--ghost-green);
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+    }
+    .lane-switch button:hover {
+      background: rgba(57,255,20,0.1);
+      box-shadow: 0 0 18px rgba(57,255,20,0.4);
+      transform: translateY(-1px);
+    }
+    .lane-switch button img {
+      width: 22px; height: 22px;
+      filter: invert(83%) sepia(80%) saturate(2200%) hue-rotate(60deg) brightness(115%);
+    }
+
+    /* ======================== Full-screen explosion overlay (multi instance) ======================== */
+    #explosion-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      pointer-events: none;
+      overflow: hidden;
+      background: #000;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.7s ease, visibility 0s linear 0.7s;
+    }
+    #explosion-overlay.active {
+      opacity: 1;
+      visibility: visible;
+      transition: opacity 0s, visibility 0s;
+    }
+    #explosion-overlay img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      image-rendering: pixelated;
+      image-rendering: crisp-edges;
+      pointer-events: none;
+    }
+    @keyframes screen-shake {
+      0%   { transform: translate(0, 0); }
+      10%  { transform: translate(-9px, 6px); }
+      20%  { transform: translate(10px, -5px); }
+      30%  { transform: translate(-7px, -7px); }
+      40%  { transform: translate(8px, 5px); }
+      50%  { transform: translate(-5px, 4px); }
+      60%  { transform: translate(6px, -3px); }
+      70%  { transform: translate(-4px, 3px); }
+      85%  { transform: translate(3px, -2px); }
+      100% { transform: translate(0, 0); }
+    }
+    body.shaking { animation: screen-shake 1.6s ease both; }
+
+    /* ======================== Lane content entrance ======================== */
+    #lane-content { position: relative; }
+    #lane-content section { opacity: 0; }
+    #lane-content.animate-in section {
+      animation: section-rise 0.6s cubic-bezier(.2,.9,.25,1.2) forwards;
+      animation-delay: calc(var(--section-index, 0) * 120ms);
+    }
+    @keyframes section-rise {
+      0%   { opacity: 0; transform: translateY(28px); filter: blur(6px); }
+      100% { opacity: 1; transform: translateY(0);    filter: blur(0); }
+    }
+    /* Karakterler alternating sol/sağdan kayar, ortada yerlerinde birleşir */
+    #lane-content.animate-in .category-container img,
+    #lane-content.animate-in .lane-empty {
+      opacity: 0;
+      animation-duration: 0.75s;
+      animation-timing-function: cubic-bezier(.2,.9,.25,1.3);
+      animation-fill-mode: forwards;
+      animation-delay: calc(var(--section-index, 0) * 110ms + var(--champ-index, 0) * 75ms + 80ms);
+    }
+    /* Tek index (0,2,4...) → soldan kayar */
+    #lane-content.animate-in .category-container img:nth-child(odd),
+    #lane-content.animate-in .lane-empty {
+      animation-name: champ-slide-from-left;
+    }
+    /* Çift index (1,3,5...) → sağdan kayar */
+    #lane-content.animate-in .category-container img:nth-child(even) {
+      animation-name: champ-slide-from-right;
+    }
+    @keyframes champ-slide-from-left {
+      0%   { opacity: 0; transform: translateX(-110vw) rotate(-12deg) scale(0.6); filter: blur(6px) brightness(1.4); }
+      55%  { opacity: 1; transform: translateX(18px)   rotate(3deg)   scale(1.08); filter: blur(0)    brightness(1.2); }
+      80%  { opacity: 1; transform: translateX(-6px)   rotate(-1deg)  scale(0.99); filter: blur(0)    brightness(1); }
+      100% { opacity: 1; transform: translateX(0)      rotate(0)      scale(1);    filter: blur(0)    brightness(1); }
+    }
+    @keyframes champ-slide-from-right {
+      0%   { opacity: 0; transform: translateX(110vw)  rotate(12deg)  scale(0.6); filter: blur(6px) brightness(1.4); }
+      55%  { opacity: 1; transform: translateX(-18px)  rotate(-3deg)  scale(1.08); filter: blur(0)    brightness(1.2); }
+      80%  { opacity: 1; transform: translateX(6px)    rotate(1deg)   scale(0.99); filter: blur(0)    brightness(1); }
+      100% { opacity: 1; transform: translateX(0)      rotate(0)      scale(1);    filter: blur(0)    brightness(1); }
+    }
+    #lane-content.animate-in .category-title {
+      animation: title-flash 0.7s ease forwards;
+      animation-delay: calc(var(--section-index, 0) * 120ms + 80ms);
+      opacity: 0;
+    }
+    @keyframes title-flash {
+      0%   { opacity: 0; letter-spacing: 16px; filter: brightness(3) blur(4px); }
+      60%  { opacity: 1; letter-spacing: 1px;  filter: brightness(1.4) blur(0); }
+      100% { opacity: 1; letter-spacing: 2px;  filter: brightness(1) blur(0); }
+    }
+
+    .lane-empty {
+      max-width: 1100px;
+      margin: 0 auto 50px;
+      text-align: center;
+      color: var(--muted);
+      font-style: italic;
+      padding: 30px;
+      border: 1px dashed rgba(179,136,255,0.2);
+      border-radius: 12px;
+    }
+
+    @media (max-width: 720px) {
+      .lane-btn { width: 140px; height: 160px; padding: 18px 12px; gap: 10px; }
+      .lane-btn img { width: 64px; height: 64px; }
+      .lane-btn span { font-size: 14px; letter-spacing: 2px; }
+      .lane-selector h3 { font-size: 22px; letter-spacing: 2px; }
+      .lane-selector h3::before, .lane-selector h3::after { display: none; }
+      .lane-btns { gap: 14px; }
+    }
+
+    /* Skills */
+    .skills-container {
+      max-width: 1100px;
+      margin: 60px auto;
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 30px;
+      background: rgba(0,0,0,0.55);
+      border: 1px solid rgba(179,136,255,0.25);
+      border-radius: 16px;
+      padding: 28px;
+      box-shadow: 0 0 24px rgba(179,136,255,0.15);
+    }
+    .skills-list { display: flex; flex-direction: column; gap: 14px; }
+    .skill {
+      display: flex; align-items: center; gap: 14px;
+      padding: 10px 12px;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(179,136,255,0.15);
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .skill:hover { background: rgba(179,136,255,0.08); transform: translateX(4px); }
+    .skill.active {
+      border-color: var(--ghost-green);
+      box-shadow: 0 0 14px var(--ghost-green);
+      background: rgba(57,255,20,0.06);
+    }
+    .skill img { width: 48px; height: 48px; border-radius: 8px; }
+    .skill p { margin: 0; font-weight: 700; color: var(--text); }
+    .skill-video-container {
+      display: flex; flex-direction: column; align-items: center;
+    }
+    .skill-video-container video {
+      width: 100%; max-width: 520px; border-radius: 12px;
+      border: 2px solid var(--ghost-green);
+      box-shadow: 0 0 20px var(--ghost-green);
+    }
+    .skill-video-container h3 {
+      color: var(--ghost-green); font-size: 1.6rem; margin: 16px 0 6px;
+      text-shadow: 0 0 8px var(--ghost-green);
+    }
+    .skill-video-container p {
+      color: var(--text); text-align: center; max-width: 520px;
+      line-height: 1.6;
+    }
+
+    /* Rating */
+    #rating-section { text-align: center; margin-top: 70px; max-width: 700px; margin-left: auto; margin-right: auto; }
+    #star-container { font-size: 48px; cursor: pointer; user-select: none; display: inline-flex; gap: 6px; flex-direction: row-reverse; }
+    .star { color: #444; transition: color 0.2s, transform 0.2s; }
+    .star:hover, .star:hover ~ .star { color: gold; text-shadow: 0 0 16px gold; transform: scale(1.15); }
+    .star.selected { color: gold; text-shadow: 0 0 16px gold; }
+    #rating-result { margin-top: 14px; font-size: 18px; color: var(--ghost-green); min-height: 24px; }
+    .rating-warn { color: var(--muted); font-size: 13px; font-style: italic; margin-top: 6px; }
+
+    /* Quote banner */
+    .quote-banner {
+      max-width: 780px;
+      margin: 24px auto;
+      padding: 14px 20px;
+      border-left: 4px solid var(--blood);
+      background: rgba(255,7,58,0.06);
+      color: var(--text);
+      font-style: italic;
+      border-radius: 6px;
+    }
+    .quote-banner small { display: block; color: var(--muted); margin-top: 6px; font-style: normal; }
+
+    /* Patch notes box (extra joke) */
+    .patch-notes {
+      max-width: 780px; margin: 40px auto;
+      background: rgba(0,0,0,0.6);
+      border: 1px dashed var(--blood);
+      border-radius: 12px;
+      padding: 20px 26px;
+    }
+    .patch-notes h3 { color: var(--blood); margin-top: 0; text-shadow: 0 0 8px var(--blood); }
+    .patch-notes ul { line-height: 1.8; padding-left: 20px; }
+    .patch-notes li::marker { color: var(--blood); }
+
+    /* Comments section */
+    #comments-section { max-width: 780px; margin: 70px auto 0; padding: 0 10px; }
+    .comment-form {
+      background: rgba(0,0,0,0.6);
+      border: 1px solid rgba(179,136,255,0.3);
+      border-radius: 16px;
+      padding: 22px 24px;
+      box-shadow: 0 0 20px rgba(179,136,255,0.15);
+      display: flex; flex-direction: column; gap: 14px;
+      margin-bottom: 30px;
+    }
+    .form-row { display: flex; flex-direction: column; gap: 6px; }
+    .form-row.submit-row, .form-row.stars-row { flex-direction: row; align-items: center; gap: 12px; flex-wrap: wrap; }
+    .comment-form input[type="text"],
+    .comment-form textarea {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(179,136,255,0.25);
+      border-radius: 8px;
+      padding: 10px 14px;
+      color: var(--text);
+      font-family: inherit;
+      font-size: 15px;
+      width: 100%;
+      box-sizing: border-box;
+      resize: vertical;
+    }
+    .comment-form input[type="text"]:focus,
+    .comment-form textarea:focus {
+      outline: none;
+      border-color: var(--ghost-green);
+      box-shadow: 0 0 10px rgba(57,255,20,0.3);
+    }
+    /* Pure-CSS rating widget (Trendyol/Reigns yöntemi)
+       DOM ters sırada (5,4,3,2,1) — flex-direction:row-reverse ile 1→5 görünür.
+       :hover ve .selected, kendisi + sonraki DOM kardeşlerini (= daha küçük değerler) gold yapar. */
+    .form-stars {
+      display: inline-flex; flex-direction: row-reverse; justify-content: flex-end;
+      gap: 4px; cursor: pointer; user-select: none; font-size: 32px;
+    }
+    .form-star { color: #444; transition: text-shadow 0.15s, transform 0.15s; }
+    .form-stars .form-star:hover,
+    .form-stars .form-star:hover ~ .form-star,
+    .form-stars .form-star.selected,
+    .form-stars .form-star.selected ~ .form-star {
+      color: gold;
+      text-shadow: 0 0 12px gold;
+    }
+    .stars-label { color: var(--muted); font-size: 13px; font-style: italic; }
+    #submit-btn {
+      background: linear-gradient(135deg, var(--ghost-green), #00aa66);
+      color: #000;
+      border: none;
+      border-radius: 8px;
+      padding: 12px 28px;
+      font-weight: 900;
+      font-size: 15px;
+      letter-spacing: 1px;
+      cursor: pointer;
+      box-shadow: 0 0 14px var(--ghost-green);
+      transition: transform 0.15s, box-shadow 0.15s;
+      font-family: inherit;
+    }
+    #submit-btn:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 0 22px var(--ghost-green); }
+    #submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    #submit-status { color: var(--muted); font-size: 14px; font-style: italic; }
+    #submit-status.ok { color: var(--ghost-green); }
+    #submit-status.err { color: var(--blood); }
+
+    /* Rating summary (Trendyol-tarzı) */
+    .rating-summary {
+      background: rgba(0,0,0,0.55);
+      border: 1px solid rgba(255,215,0,0.25);
+      border-radius: 14px;
+      padding: 22px 26px;
+      margin-bottom: 22px;
+      box-shadow: 0 0 20px rgba(255,215,0,0.08);
+    }
+    .rs-grid { display: grid; grid-template-columns: auto 1fr; gap: 28px; align-items: center; }
+    .rs-score { text-align: center; padding-right: 26px; border-right: 1px solid rgba(179,136,255,0.18); min-width: 130px; }
+    .rs-num { font-size: 56px; font-weight: 900; color: gold; text-shadow: 0 0 14px gold; line-height: 1; }
+    .rs-num small { font-size: 22px; color: var(--muted); font-weight: 400; text-shadow: none; }
+    .rs-stars { font-size: 20px; color: gold; letter-spacing: 4px; margin-top: 8px; text-shadow: 0 0 8px gold; }
+    .rs-count { color: var(--muted); font-size: 13px; margin-top: 6px; }
+    .rs-bars { display: flex; flex-direction: column; gap: 6px; }
+    .rs-bar-row { display: grid; grid-template-columns: 32px 1fr 36px; gap: 10px; align-items: center; font-size: 13px; }
+    .rs-bar-label { color: var(--muted); text-align: right; }
+    .rs-bar { height: 8px; background: rgba(255,255,255,0.06); border-radius: 4px; overflow: hidden; }
+    .rs-bar-fill { height: 100%; background: linear-gradient(90deg, #ffd700, #ff9500); border-radius: 4px; transition: width 0.5s ease; }
+    .rs-bar-count { color: var(--muted); font-size: 12px; }
+    .summary-loading, .summary-empty {
+      text-align: center; color: var(--muted); font-style: italic; padding: 16px;
+      background: rgba(0,0,0,0.4); border: 1px dashed rgba(179,136,255,0.18);
+      border-radius: 12px; margin-bottom: 22px;
+    }
+    @media (max-width: 600px) {
+      .rs-grid { grid-template-columns: 1fr; }
+      .rs-score { border-right: none; border-bottom: 1px solid rgba(179,136,255,0.18); padding-right: 0; padding-bottom: 16px; }
+    }
+
+    /* Footer (owner actions OR reactions, mutually exclusive) */
+    .comment-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 12px;
+      gap: 12px;
+      min-height: 28px;
+    }
+    .comment-footer .comment-actions { margin-top: 0; }
+
+    /* Reddit-tarzı up/down vote — SVG arrow, sağ alta sıkıştırılmış pill */
+    .comment-reactions {
+      display: inline-flex;
+      margin-left: auto;
+      border: 1px solid rgba(179,136,255,0.20);
+      border-radius: 8px;
+      overflow: hidden;
+      background: rgba(0,0,0,0.35);
+    }
+    .react-btn {
+      background: transparent;
+      border: none;
+      color: var(--muted);
+      padding: 5px 11px;
+      cursor: pointer;
+      font-size: 13px;
+      font-family: inherit;
+      font-weight: 700;
+      transition: background 0.15s, color 0.15s;
+      display: inline-flex; align-items: center; gap: 6px;
+      user-select: none;
+      line-height: 1;
+    }
+    .react-btn + .react-btn { border-left: 1px solid rgba(179,136,255,0.20); }
+    .react-btn svg { width: 14px; height: 14px; display: block; }
+    .react-btn:hover:not(:disabled) { background: rgba(179,136,255,0.12); color: var(--text); }
+    .react-btn:disabled { opacity: 0.5; cursor: wait; }
+    .react-btn.up.active   { color: var(--ghost-green); background: rgba(57,255,20,0.12); }
+    .react-btn.down.active { color: var(--blood);       background: rgba(255,7,58,0.12); }
+    .rxn-count { font-variant-numeric: tabular-nums; min-width: 10px; }
+
+    .comments-feed { display: flex; flex-direction: column; gap: 14px; }
+    .comment-card {
+      background: rgba(0,0,0,0.55);
+      border: 1px solid rgba(179,136,255,0.18);
+      border-left: 3px solid var(--ghost-green);
+      border-radius: 10px;
+      padding: 14px 18px;
+      transition: box-shadow 0.4s ease, border-color 0.4s ease;
+    }
+    .comment-card.is-own {
+      border-left-color: gold;
+      box-shadow: 0 0 14px rgba(255,215,0,0.15);
+    }
+    .comment-card.flash {
+      animation: cardFlash 1.8s ease-out;
+    }
+    @keyframes cardFlash {
+      0%   { box-shadow: 0 0 0 rgba(255,215,0,0); border-color: rgba(179,136,255,0.18); }
+      30%  { box-shadow: 0 0 30px gold;         border-color: gold; }
+      100% { box-shadow: 0 0 14px rgba(255,215,0,0.15); border-color: rgba(179,136,255,0.18); }
+    }
+    .comment-head { display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; margin-bottom: 6px; }
+    .comment-head strong { color: var(--ghost-green); text-shadow: 0 0 6px rgba(57,255,20,0.5); }
+    .comment-stars { color: gold; letter-spacing: 2px; }
+    .comment-time { color: var(--muted); font-size: 12px; margin-left: auto; }
+    .comment-card p { margin: 0 0 8px 0; color: var(--text); line-height: 1.5; white-space: pre-wrap; word-wrap: break-word; }
+    .comment-actions { margin-top: 12px; display: flex; gap: 8px; }
+    .action-btn {
+      background: rgba(179,136,255,0.08);
+      border: 1px solid var(--ghost-purple);
+      color: var(--ghost-purple);
+      border-radius: 6px;
+      padding: 5px 14px;
+      cursor: pointer;
+      font-size: 13px;
+      font-family: inherit;
+      font-weight: 600;
+      transition: all 0.15s;
+    }
+    .action-btn:hover:not(:disabled) { background: rgba(179,136,255,0.22); transform: translateY(-1px); }
+    .action-btn.delete { border-color: var(--blood); color: var(--blood); }
+    .action-btn.delete:hover:not(:disabled) { background: rgba(255,7,58,0.18); }
+    .action-btn.save { border-color: var(--ghost-green); color: var(--ghost-green); }
+    .action-btn.save:hover:not(:disabled) { background: rgba(57,255,20,0.15); }
+    .action-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+    .edit-form { margin: 8px 0 4px; display: flex; flex-direction: column; gap: 8px; }
+    .edit-input {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--ghost-green);
+      border-radius: 6px;
+      padding: 8px 10px;
+      color: var(--text);
+      font-family: inherit;
+      font-size: 14px;
+      resize: vertical;
+      width: 100%;
+      box-sizing: border-box;
+      min-height: 60px;
+    }
+    .edit-input:focus { outline: none; box-shadow: 0 0 8px rgba(57,255,20,0.4); }
+    .edit-actions { display: flex; gap: 8px; align-items: center; }
+    .edit-err { color: var(--blood); font-size: 12px; font-style: italic; }
+    .feed-empty, .feed-loading, .feed-error {
+      text-align: center; color: var(--muted); font-style: italic; padding: 20px;
+    }
+    .feed-error { color: var(--blood); }
+    .config-warning {
+      background: rgba(255,7,58,0.1);
+      border: 1px dashed var(--blood);
+      border-radius: 8px;
+      padding: 14px 18px;
+      color: var(--blood);
+      font-size: 14px;
+      margin-bottom: 16px;
+    }
+    .config-warning code { background: rgba(0,0,0,0.5); padding: 2px 6px; border-radius: 4px; }
+
+    footer {
+      text-align: center; margin-top: 70px;
+      color: var(--muted); font-size: 14px;
+      padding-bottom: 30px;
+    }
+    footer .small { display:block; margin-top: 6px; font-size: 11px; opacity: 0.7; }
+
+    @media (max-width: 720px) {
+      .skills-container { grid-template-columns: 1fr; }
+      .kda-stats { gap: 16px; }
+      .stat span:last-child { font-size: 22px; }
+      #about-me { padding: 22px; }
+      header.site-header { font-size: 18px; }
+    }
+  </style>
+</head>
+<body>
+
+<header class="site-header">
+  <img class="pp" src="https://static.bigbrain.gg/assets/lol/riot_static/16.10.1/img/profileicon/7070.png" alt="Profil Fotoğrafı" />
+  Kozminik#tft
+  <div class="rank-container">
+    <img id="rank-emblem" src="https://opgg-static.akamaized.net/images/medals_new/emerald.png" alt="Rank" class="rank-logo" />
+    <span class="rank-label" data-stat="rank-text">Zümrüt 2 · 72 LP · 61W 50L · WR %55</span>
+  </div>
+</header>
+
+<section id="kda-winrate">
+  <div class="kda-info">
+    <img src="https://ddragon.leagueoflegends.com/cdn/14.24.1/img/champion/Viego.png" alt="Viego" class="thresh-logo" />
+    <div class="kda-stats">
+      <div class="stat"><span>Kill</span><span class="kill-stat" data-stat="k">14.9</span></div>
+      <div class="stat"><span>Death</span><span class="death-stat" data-stat="d">5.5</span></div>
+      <div class="stat"><span>Assist</span><span class="assist-stat" data-stat="a">6.5</span></div>
+      <div class="stat" style="align-items:flex-start;">
+        <span class="winrate" data-stat="wr">WR %87.5</span>
+        <span class="wr-note"><span data-stat="games">8</span> Viego maçında <span data-stat="wins">7</span> win, geri kalan flame</span>
+      </div>
+    </div>
+  </div>
+  <div class="stats-meta" id="stats-meta">son güncelleme: <span data-stat="updated">az önce</span> · kaynak: u.gg</div>
+</section>
+
+<section id="about-me">
+  <h2>Merhaba, ben Kozminik#tft</h2>
+  <p>
+    Viego OTP'yim. <span class="ghost-emph" data-stat="rank-tier">Zümrüt 2</span>'yim — sözde. Çünkü <span class="ghost-emph">Viego ile %<span data-stat="wr-num">87.5</span> WR'm</span> var (<span data-stat="wins">7</span>/<span data-stat="games">8</span> kazandım) ama nedense diğer maçlarımda Talon pickleyip 14/14 atıyorum. Viego ile Master'a gidebilirim, ama talon alıyorum sürekli. malım ben. Statlarımı
+    <a href="https://u.gg/lol/profile/tr1/Kozminik-tft/overview" target="_blank" rel="noopener noreferrer">buradan</a>
+    takip edebilirsin.
+  </p>
+  <p>
+    Benimle aynı takımdaysan dikkat etmen gereken birkaç şey var:
+    <span class="ghost-emph">Q'mu</span> tutup geldiğimde öne çıkacaksın, ben tower altında 1v3 dalıp öldüğümde <span class="purple-emph">/all</span>'a bir şey yazmayacaksın, ve en önemlisi —
+    ben <span class="ghost-emph">"ss mid"</span> yazdığımda 2 saniye içinde geri çekileceksin. Çekmezsen seni de gankliyorum, küfür ederim, ondan sonra mute atıp 0/9 atarım.
+  </p>
+  <p>
+    <span class="purple-emph">Roam</span> yaptığım anlarda lanını cs farkından kaybetme — eğer 20 cs geride kalırsan, gelip tower altında 1v3 dalarım,
+    <span class="ghost-emph">0/2/0</span> olurum, herkesi flameLerim ve oyunu açık bırakıp tilt queue'ya girerim. Anlaştık mı kral?
+  </p>
+</section>
+
+<div id="explosion-overlay" aria-hidden="true"></div>
+
+<section class="lane-selector" id="lane-selector">
+  <h3>HANGİ LANE'İ OYNUYORSUN?</h3>
+  <p class="lane-sub">seç bakalım kralım.</p>
+  <div class="lane-btns" id="lane-btns">
+    <button class="lane-btn" data-lane="top" type="button">
+      <span class="scanline"></span><span class="glow-ring"></span>
+      <img src="https://static.bigbrain.gg/assets/lol/roles/top.svg" alt="Top" />
+      <span>Top</span>
+    </button>
+    <button class="lane-btn" data-lane="mid" type="button">
+      <span class="scanline"></span><span class="glow-ring"></span>
+      <img src="https://static.bigbrain.gg/assets/lol/roles/mid.svg" alt="Mid" />
+      <span>Mid</span>
+    </button>
+    <button class="lane-btn" data-lane="adc" type="button">
+      <span class="scanline"></span><span class="glow-ring"></span>
+      <img src="https://static.bigbrain.gg/assets/lol/roles/bot.svg" alt="ADC" />
+      <span>ADC</span>
+    </button>
+    <button class="lane-btn" data-lane="sup" type="button">
+      <span class="scanline"></span><span class="glow-ring"></span>
+      <img src="https://static.bigbrain.gg/assets/lol/roles/supp.svg" alt="Support" />
+      <span>Sup</span>
+    </button>
+  </div>
+</section>
+
+<div class="lane-switch" id="lane-switch">
+  <button type="button" id="lane-switch-btn">
+    <img id="lane-switch-icon" src="https://static.bigbrain.gg/assets/lol/roles/mid.svg" alt="" />
+    <span id="lane-switch-label">lane değiştir</span>
+  </button>
+</div>
+
+<div id="lane-content"></div>
+
+<section class="skills-container">
+  <div class="skills-list">
+    <div class="skill active"
+      data-video="https://lol.dyn.riotcdn.net/x/videos/champion-abilities/0234/ability_0234_P1.mp4"
+      data-name="Egemenlik (Pasif)"
+      data-desc="Düşman şampiyonu öldürdüğümde 10 saniyeliğine bedenine girerim ve onun yeteneklerini kullanırım. Genelde Yuumi öldürüyorum ve kediye dönüşüyorum. Riot bunu 4 yıldır düzeltmiyor.">
+      <img src="https://ddragon.leagueoflegends.com/cdn/14.24.1/img/passive/Viego_Passive.png" alt="Egemenlik" />
+      <p>Egemenlik</p>
+    </div>
+    <div class="skill"
+      data-video="https://lol.dyn.riotcdn.net/x/videos/champion-abilities/0234/ability_0234_Q1.mp4"
+      data-name="Bıçak Vuruşu (Q)"
+      data-desc="Kılıcımı doğrultup sallarım.">
+      <img src="https://ddragon.leagueoflegends.com/cdn/14.24.1/img/spell/ViegoQ.png" alt="Bıçak Vuruşu" />
+      <p>Bıçak Vuruşu</p>
+    </div>
+    <div class="skill"
+      data-video="https://lol.dyn.riotcdn.net/x/videos/champion-abilities/0234/ability_0234_W1.mp4"
+      data-name="Hayalet Pençe (W)"
+      data-desc="Önümdeki rakipleri sersemletirim. Şarjlı versiyon daha uzağa gider. Yasuo windwall'una çarpınca /muteall'a basarım.">
+      <img src="https://ddragon.leagueoflegends.com/cdn/14.24.1/img/spell/ViegoW.png" alt="Hayalet Pençe" />
+      <p>Hayalet Pençe</p>
+    </div>
+    <div class="skill"
+      data-video="https://lol.dyn.riotcdn.net/x/videos/champion-abilities/0234/ability_0234_E1.mp4"
+      data-name="Lanetli Yol (E)"
+      data-desc="Sis perdesi yaratırım, içinde hızlı hareket ederim, görünmez olurum. Genelde Smite-less olarak baron'a girerim ve düşmana objektifi kaptırırım.">
+      <img src="https://ddragon.leagueoflegends.com/cdn/14.24.1/img/spell/ViegoE.png" alt="Lanetli Yol" />
+      <p>Lanetli Yol</p>
+    </div>
+    <div class="skill"
+      data-video="https://lol.dyn.riotcdn.net/x/videos/champion-abilities/0234/ability_0234_R1.mp4"
+      data-name="Kalp Kırıcı (Ult)"
+      data-desc="Düşmanın canı %15'in altındaysa execute ederim. 800 hasar verir ama düşman 850 cana sahiptir. Q ile tamamlamaya çalışırım. Q ıskalar. Ben ölürüm. Pasifim Yuumi'ye geçer.">
+      <img src="https://ddragon.leagueoflegends.com/cdn/14.24.1/img/spell/ViegoR.png" alt="Kalp Kırıcı" />
+      <p>Kalp Kırıcı</p>
+    </div>
+  </div>
+
+  <div class="skill-video-container">
+    <video id="skill-video" controls autoplay muted loop playsinline>
+      <source src="https://lol.dyn.riotcdn.net/x/videos/champion-abilities/0234/ability_0234_P1.mp4" type="video/mp4" />
+      Tarayıcınız video etiketini desteklemiyor.
+    </video>
+    <h3 id="skill-name">Egemenlik (Pasif)</h3>
+    <p id="skill-desc">Düşman şampiyonu öldürdüğümde 10 saniyeliğine bedenine girerim ve onun yeteneklerini kullanırım. Genelde Yuumi öldürüyorum ve kediye dönüşüyorum. Riot bunu 4 yıldır düzeltmiyor.</p>
+  </div>
+</section>
+
+<section id="comments-section">
+  <h2 class="category-title neon-purple">YORUMLAR & YILDIZ</h2>
+  <p class="category-sub"> Hizmetimizden ne kadar memmun kaldınız?</p>
+
+  <div id="config-warning" class="config-warning" style="display:none;">
+    ⚠ API ayarlanmadı. <code>index.html</code> içindeki <code>API_URL</code>'i Worker URL'ine çevir. <code>cloudflare/SETUP-CLOUDFLARE.md</code>'ye bak.
+  </div>
+
+  <div id="rating-summary"><div class="summary-loading">İstatistikler yükleniyor…</div></div>
+
+  <form id="comment-form" class="comment-form">
+    <div class="form-row">
+      <input type="text" id="name-input" maxlength="40" placeholder="İsmin (boş = Anonim Demir Viego)" />
+    </div>
+    <div class="form-row stars-row">
+      <div id="form-stars" class="form-stars">
+        <span class="form-star" data-value="5">★</span>
+        <span class="form-star" data-value="4">★</span>
+        <span class="form-star" data-value="3">★</span>
+        <span class="form-star" data-value="2">★</span>
+        <span class="form-star" data-value="1">★</span>
+      </div>
+      <span class="stars-label">← yıldız ver (zorunlu)</span>
+    </div>
+    <div class="form-row">
+      <textarea id="message-input" maxlength="500" rows="3" placeholder="Yorumunu yaz. (max 500 karakter)" required></textarea>
+    </div>
+    <div class="form-row submit-row">
+      <button type="submit" id="submit-btn">GÖNDER</button>
+      <span id="submit-status"></span>
+    </div>
+  </form>
+
+  <div id="comments-feed" class="comments-feed">
+    <p class="feed-loading">Yorumlar yükleniyor…</p>
+  </div>
+</section>
+
+<footer>
+  © 2026 Kozminik#tft · Riot Games ile hiçbir ilgisi yok ama Riot, lütfen Viego'yu buff'la
+  <span class="small">League of Legends bir Riot Games tescilli markasıdır. Bu site bir trol içeriğidir.</span>
+</footer>
+
+<script>
+  // ============================================================
+  // API CONFIG — Cloudflare Worker URL'ini buraya yapıştır
+  // (cloudflare/SETUP-CLOUDFLARE.md'ye bak)
+  // ============================================================
+  const API_URL = 'https://otpviego-api.eren049278.workers.dev';
+  // ============================================================
+
+  // ===== Live stats — stats.json'dan oku, baked değerlerin üstüne yaz
+  // (scripts/fetch_stats.py + GitHub Action ile günlük güncellenir)
+  const TIER_TR = {
+    IRON: 'Demir', BRONZE: 'Bronz', SILVER: 'Gümüş', GOLD: 'Altın',
+    PLATINUM: 'Platin', EMERALD: 'Zümrüt', DIAMOND: 'Elmas',
+    MASTER: 'Master', GRANDMASTER: 'Grandmaster', CHALLENGER: 'Challenger'
+  };
+  const DIV_TR = { I: '1', II: '2', III: '3', IV: '4' };
+
+  function fmtAgo(iso) {
+    const s = Math.floor((Date.now() - new Date(iso).getTime()) / 1000);
+    if (s < 60)    return s + ' sn önce';
+    if (s < 3600)  return Math.floor(s/60)   + ' dk önce';
+    if (s < 86400) return Math.floor(s/3600) + ' sa önce';
+    return Math.floor(s/86400) + ' gün önce';
+  }
+
+  fetch('stats.json', { cache: 'no-cache' })
+    .then(r => r.ok ? r.json() : null)
+    .then(d => {
+      if (!d) return;
+      const set = (k, v) => document.querySelectorAll(`[data-stat="${k}"]`).forEach(el => el.textContent = v);
+
+      if (d.rank) {
+        const tierTr = TIER_TR[d.rank.tier] || d.rank.tier;
+        const divTr  = DIV_TR[d.rank.division] || d.rank.division;
+        const wrPart = (typeof d.rank.wr === 'number')
+          ? ` · ${d.rank.wins}W ${d.rank.losses}L · WR %${d.rank.wr}`
+          : '';
+        set('rank-text', `${tierTr} ${divTr} · ${d.rank.lp} LP${wrPart}`);
+        set('rank-tier', `${tierTr} ${divTr}`);
+        const emblem = document.getElementById('rank-emblem');
+        if (emblem) emblem.src = `https://opgg-static.akamaized.net/images/medals_new/${d.rank.tier.toLowerCase()}.png`;
+      }
+      if (d.viego) {
+        set('k',      d.viego.k_avg);
+        set('d',      d.viego.d_avg);
+        set('a',      d.viego.a_avg);
+        set('wr',     `WR %${d.viego.wr}`);
+        set('wr-num', d.viego.wr);
+        set('games',  d.viego.games);
+        set('wins',   d.viego.wins);
+      }
+      if (d.updated_at) set('updated', fmtAgo(d.updated_at));
+    })
+    .catch(() => { /* stats.json yoksa sessizce baked değerleri kullan */ });
+  // ============================================================
+
+  // ===== Lane bazlı şampiyon haritası =========================
+  // Buradaki listeleri elinle düzenle. champ: DDragon adı (CamelCase: MasterYi, LeBlanc).
+  // Boş bırakırsan o kategori "henüz doldurulmadı" placeholder gösterir.
+  const CHAMPIONS_BY_LANE = {
+    top: {
+      // u.gg + DDragon tag mapping ile prefill — buradan istediğin tier'a taşı
+      good: [
+        { champ: 'Aatrox',      note: '' }, { champ: 'Ambessa',     note: '' },
+        { champ: 'Belveth',     note: '' }, { champ: 'Briar',       note: '' },
+        { champ: 'Camille',     note: '' }, { champ: 'Chogath',     note: '' },
+        { champ: 'Darius',      note: '' }, { champ: 'Diana',       note: '' },
+        { champ: 'DrMundo',     note: '' }, { champ: 'Fiora',       note: '' },
+        { champ: 'Fizz',        note: '' }, { champ: 'Galio',       note: '' },
+        { champ: 'Gangplank',   note: '' }, { champ: 'Garen',       note: '' },
+        { champ: 'Gnar',        note: '' }, { champ: 'Gragas',      note: '' },
+        { champ: 'Gwen',        note: '' }, { champ: 'Hecarim',     note: '' },
+        { champ: 'Illaoi',      note: '' }, { champ: 'Irelia',      note: '' },
+        { champ: 'JarvanIV',    note: '' }, { champ: 'Jax',         note: '' },
+        { champ: 'KSante',      note: '' }, { champ: 'Kayn',        note: '' },
+        { champ: 'Kled',        note: '' }, { champ: 'LeeSin',      note: '' },
+        { champ: 'Lillia',      note: '' }, { champ: 'Malphite',    note: '' },
+        { champ: 'MasterYi',    note: '' }, { champ: 'MonkeyKing',  note: '' },
+        { champ: 'Mordekaiser', note: '' }, { champ: 'Naafiri',     note: '' },
+        { champ: 'Nasus',       note: '' }, { champ: 'Nilah',       note: '' },
+        { champ: 'Nocturne',    note: '' }, { champ: 'Nunu',        note: '' },
+        { champ: 'Olaf',        note: '' }, { champ: 'Ornn',        note: '' },
+        { champ: 'Pantheon',    note: '' }, { champ: 'Poppy',       note: '' },
+        { champ: 'Rammus',      note: '' }, { champ: 'RekSai',      note: '' },
+        { champ: 'Renekton',    note: '' }, { champ: 'Rengar',      note: '' },
+        { champ: 'Riven',       note: '' }, { champ: 'Rumble',      note: '' },
+        { champ: 'Sejuani',     note: '' }, { champ: 'Sett',        note: '' },
+        { champ: 'Shen',        note: '' }, { champ: 'Shyvana',     note: '' },
+        { champ: 'Singed',      note: '' }, { champ: 'Sion',        note: '' },
+        { champ: 'Skarner',     note: '' }, { champ: 'Trundle',     note: '' },
+        { champ: 'Tryndamere',  note: '' }, { champ: 'Udyr',        note: '' },
+        { champ: 'Urgot',       note: '' }, { champ: 'Vi',          note: '' },
+        { champ: 'Viego',       note: '' }, { champ: 'Vladimir',    note: '' },
+        { champ: 'Volibear',    note: '' }, { champ: 'Warwick',     note: '' },
+        { champ: 'XinZhao',     note: '' }, { champ: 'Yasuo',       note: '' },
+        { champ: 'Yone',        note: '' }, { champ: 'Yorick',      note: '' },
+        { champ: 'Zac',         note: '' },
+      ],
+      ok:       [],
+      bad:      [],
+      terrible: [],
+    },
+    mid: {
+      good: [
+        { champ: 'Ahri',         note: '' }, { champ: 'Akali',        note: '' },
+        { champ: 'Akshan',       note: '' }, { champ: 'Ambessa',      note: '' },
+        { champ: 'Anivia',       note: '' }, { champ: 'Annie',        note: '' },
+        { champ: 'AurelionSol',  note: '' }, { champ: 'Aurora',       note: '' },
+        { champ: 'Azir',         note: '' }, { champ: 'Bard',         note: '' },
+        { champ: 'Brand',        note: '' }, { champ: 'Briar',        note: '' },
+        { champ: 'Camille',      note: '' }, { champ: 'Cassiopeia',   note: '' },
+        { champ: 'Chogath',      note: '' }, { champ: 'Corki',        note: '' },
+        { champ: 'Diana',        note: '' }, { champ: 'Ekko',         note: '' },
+        { champ: 'Elise',        note: '' }, { champ: 'Evelynn',      note: '' },
+        { champ: 'Ezreal',       note: '' }, { champ: 'Fiddlesticks', note: '' },
+        { champ: 'Fiora',        note: '' }, { champ: 'Fizz',         note: '' },
+        { champ: 'Galio',        note: '' }, { champ: 'Gragas',       note: '' },
+        { champ: 'Heimerdinger', note: '' }, { champ: 'Hwei',         note: '' },
+        { champ: 'Irelia',       note: '' }, { champ: 'Ivern',        note: '' },
+        { champ: 'Janna',        note: '' }, { champ: 'Jhin',         note: '' },
+        { champ: 'Kaisa',        note: '' }, { champ: 'Karma',        note: '' },
+        { champ: 'Karthus',      note: '' }, { champ: 'Kassadin',     note: '' },
+        { champ: 'Katarina',     note: '' }, { champ: 'Kayle',        note: '' },
+        { champ: 'Kayn',         note: '' }, { champ: 'Kennen',       note: '' },
+        { champ: 'Khazix',       note: '' }, { champ: 'KogMaw',       note: '' },
+        { champ: 'Leblanc',      note: '' }, { champ: 'LeeSin',       note: '' },
+        { champ: 'Lillia',       note: '' }, { champ: 'Lissandra',    note: '' },
+        { champ: 'Lucian',       note: '' }, { champ: 'Lulu',         note: '' },
+        { champ: 'Lux',          note: '' }, { champ: 'Malphite',     note: '' },
+        { champ: 'Malzahar',     note: '' }, { champ: 'MasterYi',     note: '' },
+        { champ: 'Milio',        note: '' }, { champ: 'MissFortune',  note: '' },
+        { champ: 'Mordekaiser',  note: '' }, { champ: 'Morgana',      note: '' },
+        { champ: 'Naafiri',      note: '' }, { champ: 'Nami',         note: '' },
+        { champ: 'Neeko',        note: '' }, { champ: 'Nidalee',      note: '' },
+        { champ: 'Nilah',        note: '' }, { champ: 'Nocturne',     note: '' },
+        { champ: 'Nunu',         note: '' }, { champ: 'Orianna',      note: '' },
+        { champ: 'Pantheon',     note: '' }, { champ: 'Pyke',         note: '' },
+        { champ: 'Qiyana',       note: '' }, { champ: 'Quinn',        note: '' },
+        { champ: 'Renata',       note: '' }, { champ: 'Rengar',       note: '' },
+        { champ: 'Riven',        note: '' }, { champ: 'Rumble',       note: '' },
+        { champ: 'Ryze',         note: '' }, { champ: 'Samira',       note: '' },
+        { champ: 'Seraphine',    note: '' }, { champ: 'Shaco',        note: '' },
+        { champ: 'Shyvana',      note: '' }, { champ: 'Singed',       note: '' },
+        { champ: 'Smolder',      note: '' }, { champ: 'Sona',         note: '' },
+        { champ: 'Soraka',       note: '' }, { champ: 'Swain',        note: '' },
+        { champ: 'Sylas',        note: '' }, { champ: 'Syndra',       note: '' },
+        { champ: 'Taliyah',      note: '' }, { champ: 'Talon',        note: '' },
+        { champ: 'Teemo',        note: '' }, { champ: 'Tristana',     note: '' },
+        { champ: 'Tryndamere',   note: '' }, { champ: 'TwistedFate',  note: '' },
+        { champ: 'Twitch',       note: '' }, { champ: 'Varus',        note: '' },
+        { champ: 'Vayne',        note: '' }, { champ: 'Veigar',       note: '' },
+        { champ: 'Velkoz',       note: '' }, { champ: 'Vex',          note: '' },
+        { champ: 'Vi',           note: '' }, { champ: 'Viego',        note: '' },
+        { champ: 'Viktor',       note: '' }, { champ: 'Vladimir',     note: '' },
+        { champ: 'Xerath',       note: '' }, { champ: 'Yasuo',        note: '' },
+        { champ: 'Yone',         note: '' }, { champ: 'Yuumi',        note: '' },
+        { champ: 'Zed',          note: '' }, { champ: 'Ziggs',        note: '' },
+        { champ: 'Zilean',       note: '' }, { champ: 'Zoe',          note: '' },
+        { champ: 'Zyra',         note: '' },
+      ],
+      ok:       [],
+      bad:      [],
+      terrible: [],
+    },
+    adc: {
+      good: [
+        { champ: 'Akshan',      note: '' }, { champ: 'Aphelios',    note: '' },
+        { champ: 'Ashe',        note: '' }, { champ: 'Azir',        note: '' },
+        { champ: 'Caitlyn',     note: '' }, { champ: 'Corki',       note: '' },
+        { champ: 'Draven',      note: '' }, { champ: 'Ezreal',      note: '' },
+        { champ: 'Graves',      note: '' }, { champ: 'Jayce',       note: '' },
+        { champ: 'Jhin',        note: '' }, { champ: 'Jinx',        note: '' },
+        { champ: 'Kaisa',       note: '' }, { champ: 'Kalista',     note: '' },
+        { champ: 'Kayle',       note: '' }, { champ: 'Kindred',     note: '' },
+        { champ: 'KogMaw',      note: '' }, { champ: 'Lucian',      note: '' },
+        { champ: 'MissFortune', note: '' }, { champ: 'Quinn',       note: '' },
+        { champ: 'Samira',      note: '' }, { champ: 'Senna',       note: '' },
+        { champ: 'Sivir',       note: '' }, { champ: 'Smolder',     note: '' },
+        { champ: 'Teemo',       note: '' }, { champ: 'Tristana',    note: '' },
+        { champ: 'TwistedFate', note: '' }, { champ: 'Twitch',      note: '' },
+        { champ: 'Varus',       note: '' }, { champ: 'Vayne',       note: '' },
+        { champ: 'Xayah',       note: '' }, { champ: 'Zeri',        note: '' },
+      ],
+      ok:       [],
+      bad:      [],
+      terrible: [],
+    },
+    sup: {
+      good: [
+        { champ: 'Alistar',      note: '' }, { champ: 'Amumu',        note: '' },
+        { champ: 'Annie',        note: '' }, { champ: 'Ashe',         note: '' },
+        { champ: 'Bard',         note: '' }, { champ: 'Blitzcrank',   note: '' },
+        { champ: 'Brand',        note: '' }, { champ: 'Braum',        note: '' },
+        { champ: 'Fiddlesticks', note: '' }, { champ: 'Heimerdinger', note: '' },
+        { champ: 'Hwei',         note: '' }, { champ: 'Ivern',        note: '' },
+        { champ: 'Janna',        note: '' }, { champ: 'Karma',        note: '' },
+        { champ: 'Leona',        note: '' }, { champ: 'Lulu',         note: '' },
+        { champ: 'Lux',          note: '' }, { champ: 'Maokai',       note: '' },
+        { champ: 'Milio',        note: '' }, { champ: 'Morgana',      note: '' },
+        { champ: 'Nami',         note: '' }, { champ: 'Nautilus',     note: '' },
+        { champ: 'Neeko',        note: '' }, { champ: 'Orianna',      note: '' },
+        { champ: 'Pyke',         note: '' }, { champ: 'Rakan',        note: '' },
+        { champ: 'Rell',         note: '' }, { champ: 'Renata',       note: '' },
+        { champ: 'Senna',        note: '' }, { champ: 'Seraphine',    note: '' },
+        { champ: 'Sona',         note: '' }, { champ: 'Soraka',       note: '' },
+        { champ: 'Swain',        note: '' }, { champ: 'TahmKench',    note: '' },
+        { champ: 'Taliyah',      note: '' }, { champ: 'Taric',        note: '' },
+        { champ: 'Thresh',       note: '' }, { champ: 'Velkoz',       note: '' },
+        { champ: 'Xerath',       note: '' }, { champ: 'Yuumi',        note: '' },
+        { champ: 'Zilean',       note: '' }, { champ: 'Zyra',         note: '' },
+      ],
+      ok:       [],
+      bad:      [],
+      terrible: [],
+    },
+  };
+
+  const CATEGORY_META = [
+    { key: 'good',     title: 'TANRI BANA BUNLARLA OYNATSIN', sub: "cc'leri olan, hareketsiz, gankleyince kesin alınan laneler",        color: 'neon-green'  },
+    { key: 'ok',       title: 'İDARE EDER',                   sub: 'çok ses çıkarmazlar, gankime engel olmazlar',                       color: 'neon-blue'   },
+    { key: 'bad',      title: 'ALMA LÜTFEN',                  sub: "jg diff yazan orrrrrrrrrta lane karakterleri",   color: 'neon-orange' },
+    { key: 'terrible', title: 'BOK GİBİ',                     sub: 'bunlar yüzünden elohelldeyim. Riot sesimi duy kardeşim,',           color: 'neon-red'    },
+  ];
+
+  const DDRAGON = 'https://ddragon.leagueoflegends.com/cdn/14.24.1/img/champion/';
+  const escapeAttr = s => String(s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+  function renderChampions(lane) {
+    const data = CHAMPIONS_BY_LANE[lane];
+    const root = document.getElementById('lane-content');
+    if (!data || !root) return;
+
+    root.classList.remove('animate-in');
+    root.innerHTML = CATEGORY_META.map((cat, sIdx) => {
+      const list = data[cat.key] || [];
+      const body = list.length
+        ? list.map((c, cIdx) => {
+            const title = c.note ? `${c.champ} — ${c.note}` : c.champ;
+            return `<img style="--champ-index:${cIdx}" src="${DDRAGON}${encodeURIComponent(c.champ)}.png" alt="${escapeAttr(c.champ)}" title="${escapeAttr(title)}" loading="lazy" />`;
+          }).join('')
+        : `<div class="lane-empty" style="--champ-index:0">bu lane için henüz şampiyon eklenmedi</div>`;
+      return `
+        <section style="--section-index:${sIdx}">
+          <h2 class="category-title ${cat.color}">${cat.title}</h2>
+          <p class="category-sub">${cat.sub}</p>
+          <div class="category-container ${cat.color}">${body}</div>
+        </section>`;
+    }).join('');
+    // force reflow so animation restarts on consecutive lane swaps
+    void root.offsetWidth;
+    root.classList.add('animate-in');
+  }
+
+  const LANE_ICON = {
+    top: 'https://static.bigbrain.gg/assets/lol/roles/top.svg',
+    mid: 'https://static.bigbrain.gg/assets/lol/roles/mid.svg',
+    adc: 'https://static.bigbrain.gg/assets/lol/roles/bot.svg',
+    sup: 'https://static.bigbrain.gg/assets/lol/roles/supp.svg',
+  };
+  const LANE_LABEL = { top: 'Top', mid: 'Mid', adc: 'ADC', sup: 'Sup' };
+
+  const laneSelector = document.getElementById('lane-selector');
+  const laneSwitch   = document.getElementById('lane-switch');
+  const laneSwitchBtn = document.getElementById('lane-switch-btn');
+  const laneSwitchIcon = document.getElementById('lane-switch-icon');
+  const laneSwitchLabel = document.getElementById('lane-switch-label');
+  const laneBtns = document.querySelectorAll('.lane-btn');
+
+  const savedLane = localStorage.getItem('otpviego-lane');
+  const hasSavedLane = !!(savedLane && CHAMPIONS_BY_LANE[savedLane]);
+  const initialLane = hasSavedLane ? savedLane : 'mid';
+
+  function lockSelector(lane) {
+    laneSwitchIcon.src = LANE_ICON[lane] || LANE_ICON.mid;
+    laneSwitchIcon.alt = LANE_LABEL[lane] || lane;
+    laneSwitchLabel.textContent = `lane değiştir · ${LANE_LABEL[lane] || lane}`;
+    laneSelector.classList.add('locked');
+    laneSwitch.classList.add('visible');
+  }
+
+  function openSelector() {
+    laneSwitch.classList.remove('visible');
+    laneSelector.classList.remove('locked');
+    const current = localStorage.getItem('otpviego-lane') || initialLane;
+    laneBtns.forEach(b => {
+      b.classList.remove('chosen', 'dismissed');
+      b.classList.toggle('active', b.dataset.lane === current);
+    });
+  }
+
+  const EXPLOSION_GIF      = 'boom.gif';
+  const EXPLOSION_TOTAL_MS = 3500;   // tüm site bu kadar süre kapalı kalır
+  // preload so the boom is instant on first click
+  const _preloadBoom = new Image(); _preloadBoom.src = EXPLOSION_GIF;
+
+  function detonate() {
+    const overlay = document.getElementById('explosion-overlay');
+    overlay.querySelectorAll('img').forEach(n => n.remove());
+
+    overlay.classList.add('active');
+    document.body.classList.remove('shaking');
+    void document.body.offsetWidth;
+    document.body.classList.add('shaking');
+
+    // Tek tam ekran gif — cache buster ile her seferinde frame 0'dan oynar
+    const base = document.createElement('img');
+    base.alt = '';
+    base.className = 'boom-base';
+    base.src = `${EXPLOSION_GIF}?t=${Date.now()}`;
+    overlay.appendChild(base);
+
+    setTimeout(() => overlay.classList.remove('active'), EXPLOSION_TOTAL_MS);
+    setTimeout(() => document.body.classList.remove('shaking'), 1600);
+  }
+
+  function pickLane(btn, { instant = false } = {}) {
+    const lane = btn.dataset.lane;
+    localStorage.setItem('otpviego-lane', lane);
+
+    if (instant) {
+      renderChampions(lane);
+      lockSelector(lane);
+      return;
+    }
+
+    // BOOM — şimdilik kapalı, daha sonra geri açmak için: detonate();
+    // detonate();
+
+    laneBtns.forEach(b => {
+      b.classList.remove('active');
+      if (b === btn) b.classList.add('chosen');
+      else b.classList.add('dismissed');
+    });
+
+    // Timing — patlama yok, karakterler sol/sağdan kayarak birleşir:
+    //   0ms    : klik, butonlar dismiss animasyonuna başlar
+    //   ~500ms : butonlar tamamen kayıp olur
+    //   ~600ms : selector locked + switch pill belirir
+    //   ~750ms : karakterler render, slide-in stagger başlar (~1.5s sonra hepsi yerinde)
+    setTimeout(() => lockSelector(lane), 600);
+    setTimeout(() => renderChampions(lane), 750);
+  }
+
+  laneBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (btn.classList.contains('chosen') || btn.classList.contains('dismissed')) return;
+      pickLane(btn);
+    });
+  });
+
+  laneSwitchBtn.addEventListener('click', openSelector);
+
+  // initial paint:
+  // - first visit (no saved lane): selector açık, hiçbir buton pre-highlighted değil, kullanıcı seçsin
+  // - returning visitor: önce seçtiği lane locked durumda, şampiyonlar hazır
+  if (hasSavedLane) {
+    pickLane(document.querySelector(`.lane-btn[data-lane="${initialLane}"]`), { instant: true });
+  }
+  // ============================================================
+
+  // Skill switcher
+  const skills = document.querySelectorAll('.skill');
+  const video = document.getElementById('skill-video');
+  const skillName = document.getElementById('skill-name');
+  const skillDesc = document.getElementById('skill-desc');
+
+  skills.forEach(skill => {
+    skill.addEventListener('click', () => {
+      skills.forEach(s => s.classList.remove('active'));
+      skill.classList.add('active');
+      video.src = skill.getAttribute('data-video');
+      skillName.textContent = skill.getAttribute('data-name');
+      skillDesc.textContent = skill.getAttribute('data-desc');
+      video.load();
+      video.play().catch(() => {});
+    });
+  });
+
+  // ===== API hazır mı?
+  const API_READY = !!API_URL;
+  if (!API_READY) document.getElementById('config-warning').style.display = 'block';
+  const apiUrl = (path) => `${API_URL.replace(/\/$/, '')}${path}`;
+
+  // ===== Edit token storage (localStorage) — sahiplik kanıtı
+  // Bir yorum oluşturduğunda server token döndürür, biz burada saklarız.
+  // Aynı tarayıcıdan girdiğinde "kendi yorumun" olarak edit/sil butonları çıkar.
+  const TOKEN_KEY = 'viego_tokens';
+  const getTokens   = () => { try { return JSON.parse(localStorage.getItem(TOKEN_KEY) || '{}'); } catch { return {}; } };
+  const saveTokens  = (t) => localStorage.setItem(TOKEN_KEY, JSON.stringify(t));
+  const storeToken  = (id, token) => { const t = getTokens(); t[id] = token; saveTokens(t); };
+  const dropToken   = (id) => { const t = getTokens(); delete t[id]; saveTokens(t); };
+  const getToken    = (id) => getTokens()[id] || null;
+
+  // ===== Star widget (form) — sadece tek seçili yıldız, CSS sibling selector gerisini halleder
+  const formStars = document.querySelectorAll('.form-star');
+  let selectedStars = 0;
+  formStars.forEach(s => {
+    s.addEventListener('click', () => {
+      selectedStars = parseInt(s.getAttribute('data-value'), 10);
+      paintStars();
+    });
+  });
+  function paintStars() {
+    // Sadece seçilen değere sahip span'a .selected ekle. CSS rule ile o + sonraki kardeşler
+    // (= daha küçük data-value'lar) otomatik gold olur. JS inline style yok.
+    formStars.forEach(x => {
+      x.classList.toggle('selected', parseInt(x.getAttribute('data-value'), 10) === selectedStars);
+    });
+  }
+
+  // ===== Helpers
+  const statusEl = document.getElementById('submit-status');
+  function setStatus(msg, kind) {
+    statusEl.textContent = msg;
+    statusEl.className = kind || '';
+  }
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+  }
+  function timeAgo(date) {
+    const s = Math.floor((Date.now() - date.getTime()) / 1000);
+    if (s < 60)    return s + ' sn önce';
+    if (s < 3600)  return Math.floor(s/60) + ' dk önce';
+    if (s < 86400) return Math.floor(s/3600) + ' sa önce';
+    if (s < 2592000) return Math.floor(s/86400) + ' gün önce';
+    return date.toLocaleDateString('tr-TR');
+  }
+
+  // ===== İçerik filtresi (dini + küfür)
+  // Leetspeak ve Türkçe karakter normalize edilir, sonra hem tam kelime hem substring kontrol edilir.
+  // Kelime ekle/çıkar: BLOCK_PATTERNS ve BLOCK_WORDS dizilerini düzenle.
+  const LEET = { '@':'a','4':'a','0':'o','3':'e','1':'i','!':'i','|':'i','$':'s','5':'s','7':'t','ß':'b' };
+  function normalize(s) {
+    // NFKC = full-width (ＡＬＬＡＨ), math-bold (𝐀𝐋𝐋𝐀𝐇), small-caps ASCII'ye iner
+    let n = String(s || '').normalize('NFKC').toLowerCase()
+      .replace(/[ıîi̇]/g, 'i').replace(/[şŝ]/g, 's').replace(/[çĉ]/g, 'c')
+      .replace(/[öô]/g, 'o').replace(/[üû]/g, 'u').replace(/[ğĝ]/g, 'g')
+      // Yunan + Kiril confusable → Latin
+      .replace(/[αа]/g, 'a').replace(/[βв]/g, 'b').replace(/[сcс]/g, 'c').replace(/[еeе]/g, 'e')
+      .replace(/[gɡ]/g, 'g').replace(/[hн]/g, 'h').replace(/[іi]/g, 'i').replace(/[jј]/g, 'j')
+      .replace(/[κk]/g, 'k').replace(/[lӏ]/g, 'l').replace(/[мm]/g, 'm').replace(/[пn]/g, 'n')
+      .replace(/[оo]/g, 'o').replace(/[ρp]/g, 'p').replace(/[qԛ]/g, 'q').replace(/[rг]/g, 'r')
+      .replace(/[ѕs]/g, 's').replace(/[тt]/g, 't').replace(/[υu]/g, 'u').replace(/[νv]/g, 'v')
+      .replace(/[wш]/g, 'w').replace(/[xх]/g, 'x').replace(/[yу]/g, 'y').replace(/[zz]/g, 'z');
+    n = n.replace(/[@4031!|$57ß]/g, c => LEET[c] || c);
+    // Zero-width karakterler + RTL override sökülür
+    n = n.replace(/[​-‏‪-‮⁠﻿]/g, '');
+    return n.normalize('NFD').replace(/[̀-ͯ]/g, '');
+  }
+
+  // Substring patterns — boşluk/nokta/yıldız bypass'ını engellemek için tüm separator'lar silinir.
+  const BLOCK_PATTERNS = [
+    // Dini
+    'allah','alah','allh','peygamber','muhammed','muhammet','hzmuhammed','hzmuh','kuran','quran',
+    'islamiyet','ataturkek',
+    // Küfür
+    'amk','amq','amina','aminakoyim','aminakoyayim','amcik','amcuk',
+    'siktir','sktr','sikerim','sikeyim','siker','sikim','sikim','sikimde','sikiyim',
+    'piccocugu','piccocu','pickurusu','orospu','oruspu','oruspucocugu','orospucocugu',
+    'occocugu','occocu',
+    'anani','ananiskm','ananiskeyim','ananiziki','ananin','annenisikim','annenibab',
+    'bacini','bacniskeyim','bacniskm',
+    'kahpe','serefsiz','gavat','pezevenk',
+    'yarrak','yarak','yrak','gotveren','gotlek','ibne','ibe',
+    'amcuk','amciq','aminoglu','ammk','amciginis'
+  ];
+
+  // Tam-kelime listesi (kısa olanlar — substring olarak girerse false positive olur)
+  const BLOCK_WORDS = new Set([
+    'mk','aq','oc','oe','aw','sg','pic','sik','god','jhv'
+  ]);
+
+  function contentBlocked(text) {
+    const lower = normalize(text);
+    // Tam kelime kontrolü (boşluk/noktalama ile ayrılmış)
+    const tokens = lower.split(/[^a-z]+/).filter(Boolean);
+    for (const t of tokens) if (BLOCK_WORDS.has(t)) return t;
+    // Substring kontrolü (tüm boşluklar/noktalama silinmiş hali üzerinde)
+    const compact = lower.replace(/[^a-z]/g, '');
+    for (const p of BLOCK_PATTERNS) if (compact.includes(p)) return p;
+    return null;
+  }
+
+  // ===== Submit comment
+  const form = document.getElementById('comment-form');
+  const submitBtn = document.getElementById('submit-btn');
+  const nameInput = document.getElementById('name-input');
+  const messageInput = document.getElementById('message-input');
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!API_READY) { setStatus('API ayarlanmadı. cloudflare/SETUP-CLOUDFLARE.md\'ye bak.', 'err'); return; }
+
+    const name = (nameInput.value.trim() || 'Anonim Demir Viego').slice(0, 40);
+    const message = messageInput.value.trim().slice(0, 500);
+
+    if (!message)        { setStatus('Yorum boş olamaz.', 'err'); return; }
+    if (!selectedStars)  { setStatus('Önce yıldız ver.', 'err'); return; }
+
+    const bad = contentBlocked(name + ' ' + message);
+    if (bad) {
+      setStatus('Yorum yasaklı içerik içeriyor (dini/küfürlü). Düzelt ve tekrar gönder.', 'err');
+      return;
+    }
+
+    submitBtn.disabled = true;
+    setStatus('Gönderiliyor…', '');
+
+    try {
+      const postRes = await fetch(apiUrl('/api/comments'), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, message, stars: selectedStars }),
+      });
+      const postJson = await postRes.json();
+
+      // 409 — bu IP'den zaten yorum var: kullanıcıyı kendi yorumuna scroll'la
+      if (postRes.status === 409 && postJson.existing_id) {
+        setStatus('Bu IP\'den zaten yorumun var ↓ aşağıdaki kart sana ait.', 'err');
+        await loadComments();
+        const ownCard = document.querySelector(`.comment-card[data-id="${postJson.existing_id}"]`);
+        ownCard?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        ownCard?.classList.add('flash');
+        setTimeout(() => ownCard?.classList.remove('flash'), 2000);
+        return;
+      }
+      if (!postRes.ok) throw new Error(postJson.error || 'Yorum gönderilemedi');
+
+      // Cross-IP senaryosu için token'ı yine de sakla (laptop home→work)
+      if (postJson.id && postJson.edit_token) storeToken(postJson.id, postJson.edit_token);
+
+      setStatus('Yorum düştü. Teşekkürler kral.', 'ok');
+      form.reset();
+      selectedStars = 0;
+      paintStars();
+      await Promise.all([loadComments(), loadSummary()]);
+    } catch (err) {
+      setStatus('Hata: ' + err.message, 'err');
+    } finally {
+      submitBtn.disabled = false;
+    }
+  });
+
+  // ===== Load + render feed
+  const feedEl = document.getElementById('comments-feed');
+
+  async function loadComments() {
+    if (!API_READY) {
+      feedEl.innerHTML = '<p class="feed-empty">API ayarlandıktan sonra yorumlar burada görünecek.</p>';
+      return;
+    }
+    feedEl.innerHTML = '<p class="feed-loading">Yorumlar yükleniyor…</p>';
+    try {
+      const res = await fetch(apiUrl('/api/comments'), { cache: 'no-cache' });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'sunucu hatası');
+      if (!Array.isArray(data) || data.length === 0) {
+        feedEl.innerHTML = '<p class="feed-empty">Henüz yorum yok. İlk yorumu sen bırak.</p>';
+        return;
+      }
+      feedEl.innerHTML = data.map(renderComment).join('');
+    } catch (err) {
+      feedEl.innerHTML = `<p class="feed-error">Yüklenemedi: ${escapeHtml(err.message)}</p>`;
+    }
+  }
+
+  // Inline SVG — Reddit-tarzı sade up/down arrow (emoji yerine)
+  const SVG_UP   = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 4l-8 8h5v8h6v-8h5z"/></svg>';
+  const SVG_DOWN = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 20l8-8h-5V4h-6v8H4z"/></svg>';
+
+  function renderComment(c) {
+    const d = new Date(c.created_at);
+    const t = timeAgo(d);
+    const n = Math.max(1, Math.min(5, c.stars | 0));
+    const starsStr = '★'.repeat(n) + '☆'.repeat(5 - n);
+    // Identity server'dan: is_yours (IP eşleşmesi) + your_vote (IP'mizin oyu)
+    // Token fallback: cross-IP senaryosu (laptop home→work)
+    const owned = c.is_yours === 1 || !!getToken(c.id);
+    const vote  = c.your_vote || null;
+
+    // Sahip → düzenle/sil (sol). Başkası → up/down (sağ). Aynı anda iki taraf gözükmez.
+    const footer = owned
+      ? `<div class="comment-footer">
+           <div class="comment-actions">
+             <button class="action-btn edit"   data-action="edit"   type="button">Düzenle</button>
+             <button class="action-btn delete" data-action="delete" type="button">Sil</button>
+           </div>
+         </div>`
+      : `<div class="comment-footer">
+           <div class="comment-reactions">
+             <button class="react-btn up ${vote === 'like' ? 'active' : ''}"     data-react="like"    type="button" aria-label="Beğen">
+               ${SVG_UP}<span class="rxn-count">${c.likes | 0}</span>
+             </button>
+             <button class="react-btn down ${vote === 'dislike' ? 'active' : ''}" data-react="dislike" type="button" aria-label="Beğenme">
+               ${SVG_DOWN}<span class="rxn-count">${c.dislikes | 0}</span>
+             </button>
+           </div>
+         </div>`;
+
+    return `<div class="comment-card${owned ? ' is-own' : ''}" data-id="${c.id}" data-msg="${escapeHtml(c.message)}">
+      <div class="comment-head">
+        <strong>${escapeHtml(c.name)}</strong>
+        <span class="comment-stars" title="${n}/5">${starsStr}</span>
+        <span class="comment-time">${t}</span>
+      </div>
+      <p class="comment-msg">${escapeHtml(c.message)}</p>
+      ${footer}
+    </div>`;
+  }
+
+  // ===== Reaction storage (localStorage)
+  const RXN_KEY = 'viego_reactions';
+  const getReactions = () => { try { return JSON.parse(localStorage.getItem(RXN_KEY) || '{}'); } catch { return {}; } };
+  const getReaction  = (id) => getReactions()[id] || null;
+  const setReaction  = (id, v) => {
+    const r = getReactions();
+    if (v === null) delete r[id]; else r[id] = v;
+    localStorage.setItem(RXN_KEY, JSON.stringify(r));
+  };
+
+  // ===== Summary widget
+  const summaryEl = document.getElementById('rating-summary');
+  function renderStarsRow(avg) {
+    const r = Math.round(avg);
+    return '★'.repeat(r) + '☆'.repeat(5 - r);
+  }
+  function renderSummary(s) {
+    if (!s || s.count === 0) {
+      summaryEl.innerHTML = `<div class="summary-empty">Henüz yıldız yok — ilkini sen ver, ortalama buradan başlasın.</div>`;
+      return;
+    }
+    const total = s.count;
+    const rows = [5, 4, 3, 2, 1].map(n => {
+      const c = s.distribution[n] || 0;
+      const pct = total > 0 ? Math.round((c / total) * 100) : 0;
+      return `<div class="rs-bar-row">
+        <span class="rs-bar-label">${n}★</span>
+        <div class="rs-bar"><div class="rs-bar-fill" style="width:${pct}%"></div></div>
+        <span class="rs-bar-count">${c}</span>
+      </div>`;
+    }).join('');
+    summaryEl.innerHTML = `
+      <div class="rating-summary">
+        <div class="rs-grid">
+          <div class="rs-score">
+            <div class="rs-num">${s.average.toFixed(1)}<small> / 5</small></div>
+            <div class="rs-stars">${renderStarsRow(s.average)}</div>
+            <div class="rs-count">${total} yorum</div>
+          </div>
+          <div class="rs-bars">${rows}</div>
+        </div>
+      </div>`;
+  }
+  async function loadSummary() {
+    if (!API_READY) { summaryEl.innerHTML = ''; return; }
+    try {
+      const r = await fetch(apiUrl('/api/summary'), { cache: 'no-cache' });
+      if (!r.ok) throw new Error();
+      renderSummary(await r.json());
+    } catch {
+      summaryEl.innerHTML = `<div class="summary-loading">İstatistik alınamadı.</div>`;
+    }
+  }
+
+  // ===== Reactions (click delegation) — IP bazlı, server tracking
+  feedEl.addEventListener('click', async (e) => {
+    const rbtn = e.target.closest('button.react-btn');
+    if (!rbtn) return;
+    const card = rbtn.closest('.comment-card');
+    const id   = parseInt(card.dataset.id, 10);
+    const want = rbtn.dataset.react;             // 'like' | 'dislike'
+    const wasActive = rbtn.classList.contains('active');
+    const kind = wasActive ? null : want;        // aynı butona tekrar = geri al
+
+    const upBtn   = card.querySelector('.react-btn.up');
+    const downBtn = card.querySelector('.react-btn.down');
+    if (!upBtn || !downBtn) return;
+    upBtn.disabled = true; downBtn.disabled = true;
+
+    try {
+      const r = await fetch(apiUrl(`/api/comments/${id}/react`), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ kind }),
+      });
+      const j = await r.json().catch(() => ({}));
+      if (!r.ok) throw new Error(j.error || 'tepki başarısız');
+
+      upBtn.querySelector('.rxn-count').textContent   = j.likes;
+      downBtn.querySelector('.rxn-count').textContent = j.dislikes;
+      upBtn.classList.toggle('active',   kind === 'like');
+      downBtn.classList.toggle('active', kind === 'dislike');
+      // Sıralama (likes - dislikes) bazlı → oy sonrası feed yenile
+      loadComments();
+    } catch (err) {
+      alert('Hata: ' + err.message);
+    } finally {
+      upBtn.disabled = false; downBtn.disabled = false;
+    }
+  });
+
+  // ===== Edit / Delete (click delegation)
+  feedEl.addEventListener('click', async (e) => {
+    const btn  = e.target.closest('button[data-action]');
+    if (!btn) return;
+    const card = btn.closest('.comment-card');
+    const id   = parseInt(card.dataset.id, 10);
+    // Token OPSIYONEL — server IP eşleşmesi ile de yetki veriyor (gizli sekme/cross-browser).
+    // Sadece varsa header'a ekle, yoksa server is_yours check'i zaten yapacak.
+    const token = getToken(id);
+    const authHeaders = token ? { 'X-Edit-Token': token } : {};
+
+    const action = btn.dataset.action;
+
+    if (action === 'delete') {
+      if (!confirm('Yorumu silmek istediğine emin misin?')) return;
+      btn.disabled = true;
+      try {
+        const r = await fetch(apiUrl(`/api/comments/${id}`), {
+          method: 'DELETE',
+          headers: authHeaders,
+        });
+        const j = await r.json().catch(() => ({}));
+        if (!r.ok) throw new Error(j.error || 'silinemedi');
+        dropToken(id);
+        setReaction(id, null);
+        card.remove();
+        if (!feedEl.querySelector('.comment-card')) {
+          feedEl.innerHTML = '<p class="feed-empty">Henüz yorum yok. İlk yorumu sen bırak.</p>';
+        }
+        loadSummary();
+      } catch (err) {
+        alert('Hata: ' + err.message);
+        btn.disabled = false;
+      }
+      return;
+    }
+
+    if (action === 'edit') {
+      if (card.querySelector('.edit-form')) return; // zaten düzenleme açık
+      const msgEl    = card.querySelector('.comment-msg');
+      const actBox   = card.querySelector('.comment-actions');
+      const original = card.dataset.msg;
+
+      const form = document.createElement('div');
+      form.className = 'edit-form';
+      form.innerHTML = `
+        <textarea class="edit-input" maxlength="500"></textarea>
+        <div class="edit-actions">
+          <button type="button" class="action-btn save" data-action="save">Kaydet</button>
+          <button type="button" class="action-btn" data-action="cancel">İptal</button>
+          <span class="edit-err"></span>
+        </div>
+      `;
+      form.querySelector('.edit-input').value = original;
+      msgEl.style.display = 'none';
+      actBox.style.display = 'none';
+      msgEl.after(form);
+      form.querySelector('.edit-input').focus();
+
+      form.addEventListener('click', async (ev) => {
+        const b = ev.target.closest('button[data-action]');
+        if (!b) return;
+        const errEl = form.querySelector('.edit-err');
+        if (b.dataset.action === 'cancel') {
+          form.remove();
+          msgEl.style.display = '';
+          actBox.style.display = '';
+          return;
+        }
+        if (b.dataset.action === 'save') {
+          const newMsg = form.querySelector('.edit-input').value.trim();
+          if (!newMsg) { errEl.textContent = 'Boş olamaz.'; return; }
+          const bad = contentBlocked(newMsg);
+          if (bad) { errEl.textContent = 'Yasaklı içerik.'; return; }
+          b.disabled = true;
+          errEl.textContent = '';
+          try {
+            const r = await fetch(apiUrl(`/api/comments/${id}`), {
+              method: 'PATCH',
+              headers: { 'Content-Type': 'application/json', ...authHeaders },
+              body: JSON.stringify({ message: newMsg }),
+            });
+            const j = await r.json().catch(() => ({}));
+            if (!r.ok) throw new Error(j.error || 'düzenlenemedi');
+            msgEl.textContent = newMsg;
+            card.dataset.msg = newMsg;
+            msgEl.style.display = '';
+            actBox.style.display = '';
+            form.remove();
+          } catch (err) {
+            errEl.textContent = err.message;
+            b.disabled = false;
+          }
+        }
+      });
+    }
+  });
+
+  // Initial load
+  loadComments();
+  loadSummary();
+</script>
+
+</body>
+</html>

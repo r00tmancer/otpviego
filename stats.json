@@ -1,0 +1,22 @@
+{
+  "updated_at": "2026-05-24T23:31:19.930821+00:00",
+  "rank": {
+    "tier": "EMERALD",
+    "division": "II",
+    "lp": 72,
+    "wins": 61,
+    "losses": 50,
+    "wr": 55.0
+  },
+  "viego": {
+    "games": 8,
+    "wins": 7,
+    "kills": 119,
+    "deaths": 44,
+    "assists": 52,
+    "k_avg": 14.9,
+    "d_avg": 5.5,
+    "a_avg": 6.5,
+    "wr": 87.5
+  }
+}
