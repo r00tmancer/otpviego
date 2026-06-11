@@ -1,12 +1,12 @@
 {
-  "updated_at": "2026-06-11T13:01:19.733314+00:00",
+  "updated_at": "2026-06-11T17:00:40.568001+00:00",
   "rank": {
     "tier": "emerald",
-    "division": "II",
-    "lp": 91,
-    "wins": 62,
+    "division": "I",
+    "lp": 10,
+    "wins": 63,
     "losses": 50,
-    "wr": 55.4
+    "wr": 55.8
   },
   "viego": {
     "games": 8,
